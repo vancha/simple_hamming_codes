@@ -26,41 +26,46 @@ fn create_parity_for_data(data: &str) -> String {
 
     //let mut word_iter = format[i+1..].chars();
 
-    for (i, p) in format.chars().enumerate() {
-        match p {
-            'p' => {
-                let mut word_iter = format[i..].chars();
+    for (i, p) in format.chars().enumerate() {//i is the index of the character in format, p is the actual char at that index
+        match p {//match the char
+            'p' => {//if it's p, that means it stands for a parity bit.
+                let mut word_iter = format[i..].chars();//chop off the first part of the word
                 println!(
                     "starting at position {} with word {}",
                     i + 1,
                     word_iter.clone().collect::<String>()
                 );
-                'outer: loop {
+                'outer: loop {//loop according to the weird checkign skipping rules
+                    let mut sum = 0;//count the number of 1 bits
                     'inner: loop {
-                        for check in 0..i + 1 {
-                            match word_iter.next() {
-                                Some(x) => {
+                        for check in 0..i + 1 {//do the checks
+                            match word_iter.next() {//to the the next character
+                                Some(x) => {//check if it's not out of range
                                     println!("checking {},{}", x, i + 1);
+                                    match x {//what's the character here
+                                        '1' => {sum += 1;},//if one, that it's something we want to count
+                                        _   => {},//if it's a p or a 0, we discard it.
+                                    }
                                 }
                                 None => {
-                                    println!("done for position {}", i + 1);
+                                    println!("done for position {},result is {}", i + 1,sum);
                                     break 'inner;
                                 }
                             }
                         }
-                        for skip in 0..i + 1 {
+                        for skip in 0..i + 1 {//do the skips
                             match word_iter.next() {
                                 Some(x) => {
                                     //println!("skipping {}", x);
                                 }
                                 None => {
-                                    println!("done for position {}", i + 1);
+                                    println!("done for position {},result is {}", i + 1,sum);
                                     break 'inner;
                                 }
                             }
                         }
                     }
-                    break;
+                    break 'outer;
                 }
             }
             _ => {
