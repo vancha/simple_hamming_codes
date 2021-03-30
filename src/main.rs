@@ -29,7 +29,7 @@ fn create_parity_for_data(data: &str) -> String {
     for (i, p) in format.chars().enumerate() {
         match p {
             'p' => {
-                let mut word_iter = format[i ..].chars();
+                let mut word_iter = format[i..].chars();
                 println!(
                     "starting at position {} with word {}",
                     i + 1,
@@ -58,14 +58,10 @@ fn create_parity_for_data(data: &str) -> String {
                                     break 'inner;
                                 }
                             }
-                            //print!("skipping {}",word_iter.next().unwrap());
-                            //println!("");
                         }
                     }
-
                     break;
                 }
-                //println!("{} {}",p,i+1);
             }
             _ => {
                 print!("");
