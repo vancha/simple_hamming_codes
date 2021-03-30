@@ -8,10 +8,12 @@ fn calculate_nr_of_parity_bits(word_length: usize) -> u32 {
         required_parity += 1;
     }
     required_parity
-    //(word_length as f64).log2().ceil() as u32
+    //(word_length as f64).log2().ceil() as u32 //this code is going to replace the code above,
+    //eventually.. because it's faster..
 }
 
 ///given a bit sequence, return the sequence with included parity bits
+#[allow(unused_must_use)]
 fn create_parity_for_data(data: &str) -> String {
     let mut data_iter = data.chars();
     let nr_of_parity_bits = calculate_nr_of_parity_bits(data.len()) as i32;
@@ -49,15 +51,14 @@ fn create_parity_for_data(data: &str) -> String {
                             }
                             None => {
                                 if sum % 2 != 0 {
-                                    parity_bits.push('1');
+                                    parity_bits.push('1'); //no more characters in the sequence, we are done and the data for this parity bit adds up to an uneven value, add 1 as a parity bit
                                 } else {
-                                    parity_bits.push('0');
+                                    parity_bits.push('0'); //same, but data adds up to even value, add 0 as parity bit
                                 }
                                 break 'inner;
                             }
                         }
                     }
-
                     word_iter.advance_by(i + 1); //skips just as many chars as the _check loop checks, purposefully ignoring Err values.
                 }
             }
@@ -82,7 +83,7 @@ fn create_parity_for_data(data: &str) -> String {
 
 fn main() {
     let data = "10011010";
-    let data_with_parity = create_parity_for_data(data);
+    let _data_with_parity = create_parity_for_data(data);
 }
 
 #[cfg(test)]
