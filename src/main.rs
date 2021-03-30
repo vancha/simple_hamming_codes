@@ -51,7 +51,7 @@ fn create_parity_for_data(data: &str) -> String {
                         for skip in 0..i + 1 {
                             match word_iter.next() {
                                 Some(x) => {
-                                    println!("skipping {}", x);
+                                    //println!("skipping {}", x);
                                 }
                                 None => {
                                     println!("done for position {}", i + 1);
