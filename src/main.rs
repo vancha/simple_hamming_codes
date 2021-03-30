@@ -1,21 +1,81 @@
 ///given n bits of input, how many parity bits do i need?
-fn calculate_nr_of_parity_bits(word_length: usize) -> u32 {
+fn calculate_nr_of_parity_bits(word_length: usize) -> u32 {//superior way: binlog n+1, and then taking the floor
     let mut required_parity: u32 = 0;
 
     while required_parity.pow(2) < required_parity + word_length as u32 + 1 {
         required_parity += 1;
     }
     required_parity
+    //(word_length as f64).log2().ceil() as u32
 }
 
 ///given a bit sequence, return the sequence with included parity bits
 fn create_parity_for_data(data: &str) -> String {
     let mut data_iter = data.chars();
-    let format = (1..(data.len() + 1) as i32 + calculate_nr_of_parity_bits(data.len()) as i32)
-        .map(|c| if (c & (c - 1)) == 0 { 'p' } else { data_iter.next().unwrap() })//(c & (c -1))==0 means: if c is a power of two
+    let mut nr_of_parity_bits = calculate_nr_of_parity_bits(data.len()) as i32;
+    let format = (1..(data.len() + 1) as i32 + nr_of_parity_bits)
+        .map(|c| {
+            if (c & (c - 1)) == 0 {
+                'p'
+            } else {
+                data_iter.next().unwrap()
+            }
+        }) //(c & (c -1))==0 means: if c is a power of two
         .collect::<String>();
 
-    format 
+    //let mut word_iter = format[i+1..].chars();
+
+    for (i, p) in format.chars().enumerate() {
+        match p {
+            'p' => {
+                let mut word_iter = format[i + 1..].chars();
+                println!(
+                    "starting at position {} with word {}",
+                    i + 1,
+                    word_iter.clone().collect::<String>()
+                );
+                'outer: loop {
+                    //println!("string: {}",word_iter.next().unwrap());
+                    loop {
+                        for check in 0..i + 1 {
+                            match word_iter.next() {
+                                Some(x) => {
+                                    println!("checking {}", x);
+                                }
+                                None => {
+                                    println!("done for position {}", i + 1);
+                                    break 'outer;
+                                }
+                            }
+                            //print!("checking {}",word_iter.next().unwrap());
+                            //println!("");
+                        }
+                        for skip in 0..i + 1 {
+                            match word_iter.next() {
+                                Some(x) => {
+                                    println!("checking {}", x);
+                                }
+                                None => {
+                                    println!("done for position {}", i + 1);
+                                    break 'outer;
+                                }
+                            }
+                            //print!("skipping {}",word_iter.next().unwrap());
+                            println!("");
+                        }
+                    }
+
+                    break;
+                }
+                //println!("{} {}",p,i+1);
+            }
+            _ => {
+                print!("");
+            }
+        }
+    }
+
+    format
 }
 
 fn main() {
