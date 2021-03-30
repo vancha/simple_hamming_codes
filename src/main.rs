@@ -25,7 +25,7 @@ fn create_parity_for_data(data: &str) -> String {
         }) //(c & (c -1))==0 means: if c is a power of two
         .collect::<String>();
 
-    let mut parity_bits:Vec<char> = vec![];
+    let mut parity_bits: Vec<char> = vec![];
 
     for (i, p) in format.chars().enumerate() {
         //i is the index of the character in format, p is the actual char at that index
@@ -53,7 +53,11 @@ fn create_parity_for_data(data: &str) -> String {
                             }
                             None => {
                                 println!("done for position {},result is {}", i + 1, sum);
-                                if sum % 2 != 0 { parity_bits.push('1');} else { parity_bits.push('0');}
+                                if sum % 2 != 0 {
+                                    parity_bits.push('1');
+                                } else {
+                                    parity_bits.push('0');
+                                }
                                 break 'inner;
                             }
                         }
@@ -65,8 +69,18 @@ fn create_parity_for_data(data: &str) -> String {
             _ => {}
         }
     }
-    println!("{:?}",parity_bits);
-    format
+
+    let mut final_word_buffer: Vec<char> = vec![];
+    let mut index = 0;
+    for c in format.chars() {
+        if c == 'p' {
+            final_word_buffer.push(parity_bits[index]);
+            index += 1;
+        } else {
+            final_word_buffer.push(c);
+        }
+    }
+    final_word_buffer.iter().collect::<String>()
 }
 
 fn main() {
