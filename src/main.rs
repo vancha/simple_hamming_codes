@@ -1,3 +1,4 @@
+#![feature(iter_advance_by)]
 ///given n bits of input, how many parity bits do i need?
 fn calculate_nr_of_parity_bits(word_length: usize) -> u32 {
     //superior way: binlog n+1, and then taking the floor
@@ -38,7 +39,7 @@ fn create_parity_for_data(data: &str) -> String {
                 'outer: loop {//loop according to the weird checkign skipping rules
                     let mut sum = 0;//count the number of 1 bits
                     'inner: loop {
-                        for check in 0..i + 1 {//do the checks
+                        for _check in 0..i + 1 {//do the checks
                             match word_iter.next() {//to the the next character
                                 Some(x) => {//check if it's not out of range
                                     println!("checking {},{}", x, i + 1);
@@ -53,23 +54,13 @@ fn create_parity_for_data(data: &str) -> String {
                                 }
                             }
                         }
-                        for skip in 0..i + 1 {//do the skips
-                            match word_iter.next() {
-                                Some(x) => {
-                                    //println!("skipping {}", x);
-                                }
-                                None => {
-                                    println!("done for position {},result is {}", i + 1,sum);
-                                    break 'inner;
-                                }
-                            }
-                        }
+                    
+                        word_iter.advance_by(i+1);
                     }
                     break 'outer;
                 }
             }
             _ => {
-                print!("");
             }
         }
     }
